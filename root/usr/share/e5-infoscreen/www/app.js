@@ -918,7 +918,7 @@ function renderDevice(st) {
 	const [u, uu] = fmtBytes(used), [tt, tu] = fmtBytes(st.system.mem_total);
 	setText('dv-mem', `${u} ${uu} / ${tt} ${tu}`);
 	setText('dv-usb', usbText(st.usb));
-	setText('dv-lan', st.system.lan_ip);
+	setText('dv-lan', st.system.lan_ip ?? '--');
 	setText('dv-v4', st.wan.ipv4 ?? '--');
 	setText('dv-v6', st.wan.ipv6_prefix ?? st.wan.ipv6 ?? '--');
 	setText('dv-bl', String(Math.round(brightness / 255 * 100)) + '%');
