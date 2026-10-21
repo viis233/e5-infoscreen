@@ -619,6 +619,19 @@ function temperatures() {
 	return result;
 }
 
+// The LAN address is whatever network.lan carries: images differ (e.g. the
+// e5-linux mainline tree uses 10.0.55.1), and a hardcoded value is wrong on
+// every configuration but one.
+function lan_ip() {
+	let st = ubus_call('network.interface.lan', 'status');
+	let addr = st?.['ipv4-address']?.[0]?.address;
+	if (addr)
+		return addr;
+	// The interface may be down while the rest of the screen still works.
+	let cfg = ubus_call('uci', 'get', { config: 'network', section: 'lan', option: 'ipaddr' });
+	return cfg?.value ?? null;
+}
+
 function system_status() {
 	let mem = {};
 	for (let line in split(readfile('/proc/meminfo') ?? '', '\n')) {
@@ -636,7 +649,7 @@ function system_status() {
 		disk_total: root_disk().total,
 		disk_used: root_disk().used,
 		temperatures: temperatures().values,
-		lan_ip: '192.168.9.1'
+		lan_ip: lan_ip()
 	};
 }
 
