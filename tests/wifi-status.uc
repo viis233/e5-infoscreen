@@ -1,7 +1,10 @@
 'use strict';
 let radio={pending:true,up:false,interfaces:[]}, saved={}, enabled=true;
 const ctx={
- cursor:()=>({get:(config,section,key)=>key=='disabled'?(enabled?'0':'1'):null}),
+ cursor:()=>({
+  get:(config,section,key)=>key=='disabled'?(enabled?'0':'1'):null,
+  foreach:(config,kind,visit)=>visit({'.name':'fixture',mode:'ap',device:'radio0',ssid:'fixture',encryption:'none'})
+ }),
  ubus_call:()=>({radio0:radio}),
  state_get:n=>saved[n], state_put:(n,v)=>{saved[n]=v;}, stat:()=>({mtime:1})
 };
