@@ -9,8 +9,8 @@ const ctx={
  state_get:n=>saved[n], state_put:(n,v)=>{saved[n]=v;}, stat:()=>({mtime:1})
 };
 let status=loadfile('/test/wifi-under-test.uc',{raw_mode:true})()(ctx);
-assert(status().state=='starting','pending startup not shown');
-saved['wifi-start']={at:time()-31,revision:1};
+let initial=status();assert(initial.state=='starting','pending startup not shown');
+saved['wifi-start']={at:time()-31,revision:initial.qr_revision};
 let r=status();assert(r.state=='failed'&&r.error=='Wireless startup timed out','pending flag remained indefinitely');
 saved={};radio.errors=[{code:'NO_RADIO'}];
 r=status();assert(r.state=='failed'&&r.error=='NO_RADIO','native startup error hidden');
